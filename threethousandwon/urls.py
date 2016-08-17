@@ -20,10 +20,12 @@ from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token
 
 from apps.authentication.views import UserViewSet
+from apps.artist.views import ArtistViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
+router.register(r'artists', ArtistViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
