@@ -123,6 +123,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+# Register Custom User as Auth User Model
+AUTH_USER_MODEL = 'authentication.User'
+
+
 # Django Rest Framework Configuration
 # http://www.django-rest-framework.org/
 
