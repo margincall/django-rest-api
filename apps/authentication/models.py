@@ -32,6 +32,7 @@ class User(AbstractBaseUser):
         unique=True,
         db_index=True,
     )
+    nickname = models.CharField(max_length=30, default='')
     is_admin = models.BooleanField(default=False)
 
     objects = UserManager()
