@@ -14,10 +14,25 @@ class ArtistModelTests(TestCase):
 
 
 class ArtistAPITests(APITestCase):
+    def test_CREATE_Artist(self):
+        self.client.post("/artists/", {'nickname': 'Deep Purple'}, format='json')
+        self.assertIn('Deep Purple', [i.nickname for i in Artist.objects.all()])
 
-    def test_API_에서_생성된_Artist_객체를_받아오는지_확인(self):
+    def test_READ_Artist(self):
         nickname = 'Oasis'
-        self.artist = Artist.objects.create(nickname=nickname)
+        Artist.objects.create(nickname=nickname)
 
         response = self.client.get("/artists/", {}, format='json')
         self.assertIn({'nickname': nickname}, response.data, msg=response.data)
+
+    def test_UPDATE_Artist(self):
+        artist = Artist.objects.create(nickname='before_nickname')
+
+        self.client.put('/artists/' + str(artist.pk) + '/', {'nickname': 'new_nickname'}, format='json')
+        self.assertEqual('new_nickname', Artist.objects.get(pk=artist.pk).nickname)
+
+    def test_DELETE_Artist(self):
+        artist = Artist.objects.create(nickname='My Chemical Romance')
+        self.client.delete('/artists/' + str(artist.pk) + '/', {}, format='json')
+
+        self.assertNotIn('My Chemical Romance', [i.nickname for i in Artist.objects.all()])

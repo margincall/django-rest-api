@@ -39,13 +39,6 @@ class UserAPITests(APITestCase):
                                     format='json')
         self.token = response.data['token']
 
-    def test_API_에서_생성된_User_객체를_받아오는지_확인(self):
-        email = 'green@day.com'
-        User.objects.create_user(email=email, password='password')
-
-        response = self.client.get('/users/', {}, HTTP_AUTHORIZATION='JWT {}'.format(self.token), format='json')
-        self.assertIn(email, [i['email'] for i in response.data], msg=response.data)
-
     def test_API_에서_nickname_받아오는지_확인(self):
         email = 'cold@play.com'
         user = User.objects.create_user(email=email, password='password')
@@ -54,3 +47,29 @@ class UserAPITests(APITestCase):
 
         response = self.client.get('/users/', {}, HTTP_AUTHORIZATION='JWT {}'.format(self.token), format='json')
         self.assertIn('Viva La Vida', [i['nickname'] for i in response.data if i['email'] == email], msg=response.data)
+
+    def test_CREATE_User(self):
+        self.client.post('/users/', {'email': 'create@email.com', 'password': 'password'},
+                         HTTP_AUTHORIZATION='JWT {}'.format(self.token), format='json')
+        self.assertIn('create@email.com', [i.email for i in User.objects.all()])
+
+    def test_READ_User(self):
+        email = 'read@email.com'
+        User.objects.create_user(email, 'password')
+
+        response = self.client.get('/users/', {}, HTTP_AUTHORIZATION='JWT {}'.format(self.token), format='json')
+        self.assertIn(email, [i['email'] for i in response.data], msg=response.data)
+
+    def test_UPDATE_User(self):
+        user = User.objects.create_user('update@email.com', 'password')
+
+        self.client.put('/users/' + str(user.pk) + '/', {'email': user.email, 'nickname': 'new_nickname'},
+                        HTTP_AUTHORIZATION='JWT {}'.format(self.token), format='json')
+        self.assertEqual('new_nickname', User.objects.get(pk=user.pk).nickname)
+
+    def test_DELETE_User(self):
+        user = User.objects.create_user('delete@email.com', 'password')
+        self.client.delete('/users/' + str(user.pk) + '/', {},
+                           HTTP_AUTHORIZATION='JWT {}'.format(self.token), format='json')
+
+        self.assertNotIn('delete@email.com', [i.nickname for i in User.objects.all()])
