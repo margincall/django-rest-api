@@ -1,14 +1,15 @@
-from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 from django.core.urlresolvers import reverse
 
 from rest_framework import status
 
+from apps.authentication.models import User
+
 
 class JSONWebTokenAuthenticationTests(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(
-            username='user_a', email='user_a@a.com', password='password_a')
+            email='user_a@a.com', password='password_a')
         self.url_obtain_token = reverse('obtain_jwt_token')
 
     def test_JWT_토큰_생성_후_인증(self):
@@ -16,7 +17,7 @@ class JSONWebTokenAuthenticationTests(APITestCase):
         self.assertNotEqual(response.status_code, status.HTTP_200_OK, msg=response.data)
 
         response = self.client.post(self.url_obtain_token,
-                                    {"username": 'user_a', "password": 'password_a'},
+                                    {"email": 'user_a@a.com', "password": 'password_a'},
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response)
 
