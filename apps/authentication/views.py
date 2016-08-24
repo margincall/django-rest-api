@@ -1,12 +1,4 @@
-from allauth.account.views import LoginView
-from allauth.socialaccount.adapter import get_adapter
-from allauth.socialaccount.helpers import complete_social_login
-from allauth.socialaccount.models import SocialApp, SocialToken, SocialLogin
-
-from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter, fb_complete_login
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from django.contrib.auth.models import User
-from django.http import HttpResponse
 from django.shortcuts import render
 
 from rest_framework import viewsets
@@ -15,16 +7,19 @@ from rest_framework.permissions import AllowAny
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.http import JsonResponse
-from rest_framework.decorators import api_view
+
+from allauth.account.views import LoginView
+from allauth.socialaccount.adapter import get_adapter
+from allauth.socialaccount.helpers import complete_social_login
+from allauth.socialaccount.models import SocialApp, SocialToken, SocialLogin
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter, fb_complete_login
+
+from apps.authentication.serializers import UserSerializer, GlobalAuthentication
+from apps.authentication.models import User
 
 import sys, traceback
 
 
-from apps.authentication.serializers import UserSerializer, EverybodyCanAuthentication
-
-
-# ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -38,30 +33,23 @@ def facebookTemplate(request):
 
 class RestFacebookLogin(APIView):
     """
-    Login or register a user based on an authentication token coming
-    from Facebook.
+    Login or register a user based on an authentication token coming from Facebook.
     Returns user data including session id.
+    reference - http://stackoverflow.com/questions/17861846/plug-in-django-allauth-as-endpoint-in-django-rest-framework
     """
 
     # this is a public api!!!
     renderer_classes = (JSONRenderer,)
     permission_classes = (AllowAny,)
-    authentication_classes = (EverybodyCanAuthentication,)
+    authentication_classes = (GlobalAuthentication,)
 
-    #@api_view(['GET', ])
     def dispatch(self, *args, **kwargs):
-        pass
-        #return Response(status=402, data={
-        #    'detail': 'dispatch',
-        #})
         return super(RestFacebookLogin, self).dispatch(*args, **kwargs)
 
-    #@api_view(['GET', ])
     def get(self, request, *args, **kwargs):
         request.encoding = "utf-8"
 
         try:
-            #return HttpResponse("123")
             original_request = request._request
             auth_token = request.GET.get('auth_token', '')
 
@@ -100,3 +88,4 @@ class RestFacebookLogin(APIView):
             return Response(status=401, data={
                 'detail': 'Bad Access Token',
             })
+

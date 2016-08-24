@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'apps.authentication',
+    'apps.artist',
     'tests',
     #Oauth
     # The Django sites framework is required
@@ -157,6 +158,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Register Custom User as Auth User Model
+AUTH_USER_MODEL = 'authentication.User'
+
 
 # Django Rest Framework Configuration
 # http://www.django-rest-framework.org/
