@@ -3,6 +3,7 @@ from django.test import TestCase
 from rest_framework.test import APITestCase
 
 from apps.artist.models import Artist
+from apps.authentication.models import User
 
 
 class ArtistModelTests(TestCase):
@@ -11,6 +12,22 @@ class ArtistModelTests(TestCase):
         nickname = 'Nirvana'
         artist = Artist.objects.create(nickname=nickname)
         self.assertEqual(str(artist), nickname)
+
+    def test_Artist_에_User_외부키_부여(self):
+        user = User.objects.create_user('artist@email.com', 'password')
+        artist = Artist.objects.create(nickname='artist_name')
+        artist.user = user
+        artist.save()
+        self.assertEqual(user, Artist.objects.get(nickname='artist_name').user)
+
+    def test_Artist_에_연결된_User_삭제(self):
+        user = User.objects.create_user('will_delete@email.com', 'password')
+        artist = Artist.objects.create(nickname='artist_name')
+        artist.user = user
+        artist.save()
+
+        user.delete()
+        self.assertIsNone(Artist.objects.get(nickname='artist_name').user)
 
 
 class ArtistAPITests(APITestCase):

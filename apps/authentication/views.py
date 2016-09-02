@@ -1,3 +1,6 @@
+import sys
+import traceback
+
 from django.contrib.auth.models import User
 from django.shortcuts import render
 
@@ -8,16 +11,12 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from allauth.account.views import LoginView
-from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount.helpers import complete_social_login
 from allauth.socialaccount.models import SocialApp, SocialToken, SocialLogin
-from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter, fb_complete_login
+from allauth.socialaccount.providers.facebook.views import fb_complete_login
 
 from apps.authentication.serializers import UserSerializer, GlobalAuthentication
 from apps.authentication.models import User
-
-import sys, traceback
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -25,10 +24,8 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
-
 def facebookTemplate(request):
     return render(request, "facebook.html",{})
-
 
 
 class RestFacebookLogin(APIView):

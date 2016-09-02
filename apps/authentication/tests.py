@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from rest_framework.test import APITestCase
 
 from apps.authentication.models import User
+from apps.artist.models import Artist
 
 
 class UserModelTest(TestCase):
@@ -27,6 +28,17 @@ class UserModelTest(TestCase):
         user.nickname = 'my_nickname'
         user.save()
         self.assertEqual('my_nickname', User.objects.get(email='panic@the.disco').nickname)
+
+    def test_유저가_아티스트가_아닐_때_is_artist_False_반환(self):
+        user = User.objects.create_user('not_artist@user.com', 'password')
+        self.assertFalse(user.is_artist())
+
+    def test_유저가_아티스트일_때_is_artist_True_반환(self):
+        user = User.objects.create_user('artist@user.com', 'password')
+        artist = Artist.objects.create(nickname='artist_name')
+        artist.user = user
+        artist.save()
+        self.assertTrue(user.is_artist())
 
 
 class UserAPITests(APITestCase):
