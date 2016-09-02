@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'apps.authentication',
     'apps.artist',
     'tests',
-    #Oauth
+    # Oauth
     # The Django sites framework is required
     'django.contrib.sites',
     'allauth',
@@ -182,14 +182,14 @@ REST_FRAMEWORK = {
         'rest_framework_social_oauth2.authentication.SocialAuthentication',
     ),
 }
-#SOCIAL_AUTH_LOGIN_REDIRECT_URL
 
-LOGIN_REDIRECT_URL ="/"
+# SOCIAL_AUTH_LOGIN_REDIRECT_URL
+LOGIN_REDIRECT_URL = "/"
 
-SOCIAL_AUTH_FACEBOOK_KEY='185935135157991'
-SOCIAL_AUTH_FACEBOOK_SECRET='3468c03b3986cb82fa423af6797e825c'
+SOCIAL_AUTH_FACEBOOK_KEY = '185935135157991'
+SOCIAL_AUTH_FACEBOOK_SECRET = '3468c03b3986cb82fa423af6797e825c'
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-DEFAULT_CHARSET="UTF8"
-UNICODE_JSON=True
+DEFAULT_CHARSET = "UTF8"
+UNICODE_JSON = True
 
 SITE_ID = 1
