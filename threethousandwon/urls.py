@@ -21,11 +21,7 @@ from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token
 
 
-from apps.authentication.views import UserViewSet, RestFacebookLogin, facebookTemplate
-from apps.artist.views import ArtistViewSet
-
-
-from apps.authentication.views import UserViewSet
+from apps.authentication.views import UserViewSet, RestFacebookLogin, render_facebook_template
 from apps.artist.views import ArtistViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
@@ -40,9 +36,9 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token-auth/', obtain_jwt_token, name='obtain_jwt_token'),
-    url(r'^accounts/', include('allauth.urls') ),
-    url(r'^facebook/', csrf_exempt(facebookTemplate)),
-    #url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
+    url(r'^accounts/', include('allauth.urls')),
+    url(r'^facebook/', csrf_exempt(render_facebook_template)),
+    # url(r'^social/', include('social.apps.django_app.urls', namespace='social')),
     url(r'^auth/', include('rest_framework_social_oauth2.urls')),
     url(
         r'^rest/facebook-login/$',

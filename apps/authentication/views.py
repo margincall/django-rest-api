@@ -1,7 +1,6 @@
 import sys
 import traceback
 
-from django.contrib.auth.models import User
 from django.shortcuts import render
 
 from rest_framework import viewsets
@@ -24,8 +23,8 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
-def facebookTemplate(request):
-    return render(request, "facebook.html",{})
+def render_facebook_template(request):
+    return render(request, "facebook.html", {})
 
 
 class RestFacebookLogin(APIView):
@@ -85,4 +84,3 @@ class RestFacebookLogin(APIView):
             return Response(status=401, data={
                 'detail': 'Bad Access Token',
             })
-
