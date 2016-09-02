@@ -7,10 +7,9 @@ from apps.authentication.models import User
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('url', 'username', 'email', 'is_staff')
+        fields = ('url', 'email', 'nickname', 'is_staff')
 
 
 class GlobalAuthentication(TokenAuthentication):
     def authenticate(self, request):
         return None
-

@@ -10,4 +10,3 @@ class ArtistViewSet(viewsets.ModelViewSet):
 
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
-

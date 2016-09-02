@@ -25,6 +25,9 @@ from apps.authentication.views import UserViewSet, RestFacebookLogin, facebookTe
 from apps.artist.views import ArtistViewSet
 
 
+from apps.authentication.views import UserViewSet
+from apps.artist.views import ArtistViewSet
+
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -46,5 +49,4 @@ urlpatterns = [
         csrf_exempt(RestFacebookLogin.as_view()),
         name='rest_facebook_login'
     ),
-
 ]
