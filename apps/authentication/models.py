@@ -39,6 +39,12 @@ class User(AbstractBaseUser):
 
     USERNAME_FIELD = 'email'
 
+    def is_artist(self):
+        if self.artist_set.first():
+            return True
+        else:
+            return False
+
     def get_full_name(self):
         return self.email
 
